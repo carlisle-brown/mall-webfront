@@ -1,6 +1,6 @@
-const webpack = require("webpack");
-const ExtractTextPlugin = require("extract-text-webpack-plugin");
-
+const webpack = require("webpack")
+const path = require("path")
+const ExtractTextPlugin = require("extract-text-webpack-plugin")
 var config = {
     entry: {
         'common': ['./src/page/common/index.js'],
@@ -8,27 +8,46 @@ var config = {
         'login': ['./src/page/login/index.js']
     },
     output: {
-        path: './dist',
+        path: path.resolve(__dirname, './dist'),
         filename:'js/[name].js'
+    },
+    optimization: {
+        splitChunks: {
+            cacheGroups: {
+                vendor: {
+                    name: "vendor",
+                    test: /[\\/]node_modules[\\/]/,
+                    chunks: "all",
+                    priority: 10 // 优先级
+                },
+                common: {
+                    name: "common",
+                    test: /[\\/]src[\\/]/,
+                    minSize: 1024,
+                    chunks: "all",
+                    priority: 5
+                }
+            }
+        }
     },
     externals: {
         'jquery' : 'window.jQuery'
     },
     module: {
-        loaders: [
-            { 
-                test: /\.css$/, 
-                loader: ExtractTextPlugin.extract("style-loader", "css-loader")
-            }
+        rules: [
+            {
+              test: /\.css$/,
+              use: ExtractTextPlugin.extract({
+                fallback:"style-loader",
+                use:"css-loader"
+              })
+            },
         ]
     },
     plugins: [
-        new webpack.optimize.CommonsChunkPlugin({
-            name : 'common',
-            filename : 'js/base.js'
-        }),
-        new ExtractTextPlugin('css/[name].css')
+      new ExtractTextPlugin('css/[name].css')
     ]
+
 };
 
 module.exports = config;

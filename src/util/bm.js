@@ -1,4 +1,4 @@
-var Hogan = require('hogan')
+// import Hogan from 'hogan'
 var conf = {
   serverHost:''
 }
@@ -41,10 +41,10 @@ var _bm = {
     return result ? encodeURIComponent(result[2]) : null;
   },
   // 渲染html模板
-  renderHtml: function(htmlTemplate,data){
-    var template = Hogan.compile(htmlTemplate),result = template.render(data)
-    return result
-  },
+  // renderHtml: function(htmlTemplate,data){
+  //   var template = Hogan.compile(htmlTemplate),result = template.render(data)
+  //   return result
+  // },
   // 成功提示
   successTips: function(msg){
     alert(msg || '操作成功')

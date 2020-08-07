@@ -1,1 +1,1 @@
-require('./layout.css')
+import "./layout.css"

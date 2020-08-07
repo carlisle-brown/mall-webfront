@@ -1,2 +1,1 @@
-require('./index.css')
-require("../module.js")
+var _bm = require('util/bm.js')

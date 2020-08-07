@@ -1,7 +1,7 @@
 const webpack = require("webpack")
 const path = require("path")
-const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const HtmlWebpackPlugin = require("html-webpack-plugin");
+const ExtractTextPlugin = require("extract-text-webpack-plugin")
 
 // 环境变量配置 dev/online
 const WEBPACK_ENV = process.env.WEBPACK_ENV || 'dev';
@@ -25,7 +25,6 @@ var config = {
     mode: 'development',
     output: {
         path: path.resolve(__dirname, './dist'),
-        publicPath: '/dist',
         filename:'js/[name].js'
     },
     optimization: {
@@ -54,7 +53,10 @@ var config = {
         rules: [
             {
               test: /\.css$/,
-              use: [MiniCssExtractPlugin.loader, 'css-loader'],
+              use: ExtractTextPlugin.extract({
+                fallback: "style-loader",
+                use: "css-loader"
+              })
             },
             {
               test: /\.(gif|png|jpg|woff|svg|eot|ttf)\??.*$/,
@@ -62,16 +64,21 @@ var config = {
             },
         ]
     },
+    resolve : {
+      alias : {
+        util    : __dirname + '/src/util',
+        page    : __dirname + '/src/page',
+        image   : __dirname + '/src/image',
+        service : __dirname + '/src/service',
+      }
+    },
     plugins: [
       // 将CSS单独打包至一个文件
-      new MiniCssExtractPlugin({
-        filename: 'css/[name].css',
-      }),
+      new ExtractTextPlugin("css/[name].css"),
       // html模板处理插件
       new HtmlWebpackPlugin(getHtmlConfig('index')),
       new HtmlWebpackPlugin(getHtmlConfig('login')),
     ]
-
 };
 
 if('dev' === WEBPACK_ENV){

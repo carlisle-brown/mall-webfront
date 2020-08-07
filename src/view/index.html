@@ -1,8 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
-<%= require('html-loader!./layout/html-head.html') %>
+<head>
+    <%= require('html-loader!./layout/html-common.html') %>
+    <title>Brown Mall 电商平台</title>
+</head>
 <body>
-    <script src="http://code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
-    <script src="../../dist/js/index.js"></script>
+    <%= require('html-loader!./layout/footer.html') %>
 </body>
 </html>

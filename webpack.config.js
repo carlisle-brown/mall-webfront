@@ -1,10 +1,10 @@
 const webpack = require("webpack")
-const path = require("path")
 const HtmlWebpackPlugin = require("html-webpack-plugin");
-const ExtractTextPlugin = require("extract-text-webpack-plugin")
+const ExtractTextPlugin   = require('extract-text-webpack-plugin');
 
 // 环境变量配置 dev/online
 const WEBPACK_ENV = process.env.WEBPACK_ENV || 'dev';
+
 // 获取html-webpack-plugin参数的方法
 var getHtmlConfig = function(name) {
     return {
@@ -15,6 +15,7 @@ var getHtmlConfig = function(name) {
         chunks: ['common',name]
     };
 }
+
 // webpack config
 var config = {
     entry: {
@@ -24,38 +25,18 @@ var config = {
     },
     mode: 'development',
     output: {
-        path: path.resolve(__dirname, './dist'),
+        path: 'dist',
+        publicPath: '/dist',
         filename:'js/[name].js'
-    },
-    optimization: {
-        splitChunks: {
-            cacheGroups: {
-                vendor: {
-                    name: "vendor",
-                    test: /[\\/]node_modules[\\/]/,
-                    chunks: "all",
-                    priority: 10
-                },
-                common: {
-                    name: "common",
-                    test: /[\\/]src[\\/]/,
-                    minSize: 1024,
-                    chunks: "all",
-                    priority: 5
-                }
-            }
-        }
     },
     externals: {
         'jquery' : 'window.jQuery'
     },
     module: {
-        rules: [
+        loaders: [
             {
               test: /\.css$/,
-              use: ExtractTextPlugin.extract({
-                use: ['css-loader']
-              })
+              loader: ExtractTextPlugin.extract("style-loader","css-loader")
             },
             {
               test: /\.(gif|png|jpg|woff|svg|eot|ttf)\??.*$/,
@@ -66,17 +47,23 @@ var config = {
     resolve : {
       alias : {
         util    : __dirname + '/src/util',
+        node_modules    : __dirname + '/node_modules',
         page    : __dirname + '/src/page',
         image   : __dirname + '/src/image',
         service : __dirname + '/src/service',
       }
     },
     plugins: [
+      // 独立通用模块到js/base.js
+      new webpack.optimize.CommonsChunkPlugin({
+        name : 'common',
+        filename : 'js/base.js'
+      }),
       // 将CSS单独打包至一个文件
       new ExtractTextPlugin("css/[name].css"),
       // html模板处理插件
       new HtmlWebpackPlugin(getHtmlConfig('index')),
-      new HtmlWebpackPlugin(getHtmlConfig('login')),
+      new HtmlWebpackPlugin(getHtmlConfig('login'))
     ]
 };
 

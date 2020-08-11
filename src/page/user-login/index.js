@@ -37,7 +37,6 @@ var page = {
 		validateResult = this.formValidate(formData);
 		if(validateResult.status){
 			_user.login(formData, function(res){
-				console.log(res)
 				window.location.href = _bm.getUrlParam('redirect') || './index.html';
 			}, function(errMsg){
 				formError.show(errMsg);

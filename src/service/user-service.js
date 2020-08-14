@@ -107,6 +107,7 @@ var _user = {
     },
     // 登出
     logout : function(resolve, reject){
+        console.log('退出')
         _bm.request({
             url     : _bm.getServerUrl('/user/logout.do'),
             method  : 'POST',

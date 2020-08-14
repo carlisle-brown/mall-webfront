@@ -4,7 +4,6 @@ require('./index.css')
 var navSide = require('page/common/nav-side/index.js')
 var _bm = require('util/bm.js')
 var _user = require('service/user-service')
-var templateIndex = require('./index.string')
 
 // page 逻辑部分
 var page = {
@@ -15,19 +14,7 @@ var page = {
     onLoad:function(){
         // 初始化左侧菜单
         navSide.init({
-            name: 'user-center'
-        })
-        // 加载个人信息
-        this.loadUserInfo();
-    },
-    // 加载用户信息
-    loadUserInfo:function () {
-        var userHtml = ''
-        _user.getUserInfo(function (res) {
-            userHtml = _bm.renderHtml(templateIndex, res)
-            $('.panel-body').html(userHtml)
-        }, function (errMsg) {
-            _bm.errorTips(errMsg)
+            name: 'user-pass-update'
         })
     },
     // 验证字段信息
@@ -36,21 +23,17 @@ var page = {
 			status:false,
 			msg:''
 		};
-		if(!_bm.validate(formData.phone,'phone')){
-			result.msg='手机号格式不正确';
+		if(!_bm.validate(formData.password,'require')){
+			result.msg='原密码不能为空';
 			return result;
 		}
-		if(!_bm.validate(formData.email,'email')){
-			result.msg='邮箱格式不正确';
+		if(!formData.passwordNew || formData.passwordNew.length < 6){
+			result.msg='密码长度不得少于6位';
 			return result;
 		}
-		if(!_bm.validate(formData.question,'require')){
+		if(formData.passwordNew !== formData.passwordConfirm){
 			console.log(formData.question)
-			result.msg='密码提示问题不能为空';
-			return result;
-		}
-		if(!_bm.validate(formData.answer,'require')){
-			result.msg='密码提示问题答案不能为空';
+			result.msg='两次密码不一致';
 			return result;
 		}
 		result.status = true;
@@ -62,17 +45,18 @@ var page = {
         // 点击提交按钮后的行为
         $(document).on('click','.btn-submit',function(){
             var userInfo = {
-                phone:$.trim($('#phone').val()),
-                email:$.trim($('#email').val()),
-                question:$.trim($('#question').val()),
-                answer:$.trim($('#answer').val()),
+                password:$.trim($('#password').val()),
+                passwordNew:$.trim($('#password-new').val()),
+                passwordConfirm:$.trim($('#password-confirm').val()),
             },
             validateResult = _this.valdateFrom(userInfo);
             if(validateResult.status){
-                // 更改用户信息
-                _user.updateUserInfo(userInfo, function(res,msg){
+                // 更改用户密码
+                _user.updatePassword({
+                    passwordOld: userInfo.password,
+                    passwordNew: userInfo.passwordNew
+                }, function(res,msg){
                     _bm.successTips(msg);
-                    window.location.href='./user-center.html'
                 }, function(errMsg){
                     _bm.errorTips(errMsg);
                 });

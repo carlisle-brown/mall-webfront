@@ -21,7 +21,34 @@ var page = {
         this.loadDetail();
     },
     bindEvent : function(){
-        
+        var _this = this;
+        $(document).on('mouseenter', '.p-img-item', function(){
+            var imageUrl   = $(this).find('.p-img').attr('src');
+            $('.main-img').attr('src', imageUrl);
+        });
+        $(document).on('click', '.p-count-btn', function(){
+            console.log('添加数据')
+            var type        = $(this).hasClass('plus') ? 'plus' : 'minus',
+                $pCount     = $('.p-count'),
+                currCount   = parseInt($pCount.val()),
+                minCount    = 1,
+                maxCount    = _this.data.detailInfo.stock || 1;
+            if(type === 'plus'){
+                 $pCount.val(currCount < maxCount ? currCount + 1 : maxCount);
+            }else{
+                 $pCount.val(currCount > minCount ? currCount - 1 : minCount);
+            }
+        });
+        $(document).on('click', '.cart-add', function(){
+             _cart.addToCart({
+                productId   : _this.data.productId,
+                count       : $('.p-count').val()
+             },function(res){
+                window.location.href = './result.html?type=cart-add';
+            },function(errMsg){
+                _bm.errorTips(errMsg)
+            });
+        });
     },
     // 加载详情数据
     loadDetail : function(){
@@ -32,6 +59,7 @@ var page = {
         
         _product.getProductDetail(this.data.productId, function(res){
             _this.filter(res);
+            _this.data.detailInfo = res;
             html = _bm.renderHtml(templateIndex,res)
             $('.page-wrap').html(html);
         }, function(errMsg){

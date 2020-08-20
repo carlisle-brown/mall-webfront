@@ -1,13 +1,3 @@
-/*
- * @Description: ()
- * @Author:  
- * @Date: 2020-08-17 16:41:48
- * @LastEditTime: 2020-08-19 23:01:03
- * @LastEditors:  
- */
-
-'use strict';
-
 var _bm = require('util/bm.js');
 
 var _order = {

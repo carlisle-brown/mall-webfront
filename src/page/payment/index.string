@@ -1,0 +1,15 @@
+<!--
+ * @Description: 订单支付模板
+ * @Author:  Carlisle
+ * @Date: 2020-08-20 10:58:59
+ * @LastEditTime: 2020-08-20 11:53:53
+-->
+<p class="payment-tips">订单提交成功，请尽快支付！订单号：{{orderNo}}</p>
+<p class="payment-tips enhance">请使用支付宝App进行扫码支付</p>
+<div class="img-con">
+  <img
+    class="qr-code"
+    src="{{qrUrl}}"
+    alt="支付二维码"
+  />
+</div>

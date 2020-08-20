@@ -36,12 +36,13 @@ var config = {
         'user-center': ['./src/page/user-center/index.js'],
         'user-center-update': ['./src/page/user-center-update/index.js'],
         'user-pass-update': ['./src/page/user-pass-update/index.js'],
-        'result': ['./src/page/result/index.js']
+        'result': ['./src/page/result/index.js'],
+        'about': ['./src/page/about/index.js']
     },
     mode: 'development',
     output: {
-        path: 'dist',
-        publicPath: '/dist',
+        path: __dirname + '/dist/',
+        publicPath: 'dev' === WEBPACK_ENV ? '/dist/' : '//s.brownmall.com/happymmall-webfront/dist/',
         filename:'js/[name].js'
     },
     externals: {
@@ -59,7 +60,11 @@ var config = {
             },
             {
               test: /\.string$/,
-              loader: 'html-loader'
+              loader: 'html-loader',
+              query : {
+                minimize : true,
+                removeAttributeQuotes : false
+              }
             },
         ]
     },
@@ -95,7 +100,8 @@ var config = {
       new HtmlWebpackPlugin(getHtmlConfig('user-center','个人中心')),
       new HtmlWebpackPlugin(getHtmlConfig('user-center-update','修改个人信息')),
       new HtmlWebpackPlugin(getHtmlConfig('user-pass-update','修改密码')),
-      new HtmlWebpackPlugin(getHtmlConfig('result','操作结果'))
+      new HtmlWebpackPlugin(getHtmlConfig('result','操作结果')),
+      new HtmlWebpackPlugin(getHtmlConfig('about','关于BMall'))
     ]
 };
 

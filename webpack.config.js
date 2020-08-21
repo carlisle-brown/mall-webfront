@@ -42,7 +42,7 @@ var config = {
     mode: 'development',
     output: {
         path: __dirname + '/dist/',
-        publicPath: 'dev' === WEBPACK_ENV ? '/dist/' : '//s.happymmall.com/happymmall-webfront/dist/',
+        publicPath: 'dev' === WEBPACK_ENV ? '/dist/' : '//s.happymmall.com/happymall-webfront/dist/',
         filename:'js/[name].js'
     },
     externals: {
